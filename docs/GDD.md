@@ -58,7 +58,7 @@ Tamaño visual del jugador: 1x1 unidad (32x32 píxeles)
 ### 2.2 Sistema de Combate Básico
 
 **Ataque Cuerpo a Cuerpo:**
-- **Tecla:** Click Izquierdo del Mouse / Tecla J
+- **Tecla:** Click Izquierdo del Mouse
 - **Daño:** 3 puntos
 - **Alcance:** 1.2 unidades (frontal, arco de 90°)
 - **Cooldown:** 0.5 segundos
@@ -94,11 +94,11 @@ Tamaño visual del jugador: 1x1 unidad (32x32 píxeles)
 ### 3.1 Controles de Selección
 
 **Mapeo de Teclas:**
-- **F:** Seleccionar Runa de Fuego
-- **E:** Seleccionar Runa de Escudo
-- **M:** Seleccionar Runa de Movimiento
+- **E:** Seleccionar Runa de Fuego
+- **R:** Seleccionar Runa de Escudo
+- **T:** Seleccionar Runa de Movimiento
 - **Espacio:** Confirmar combinación Y ejecutar habilidad individual
-- **ESC:** Cancelar selección actual
+- **TAB:** Cancelar selección actual
 - **Click Derecho:** Alternativa a Espacio
 
 ### 3.2 Flujo de Selección (FSM)
@@ -106,21 +106,21 @@ Tamaño visual del jugador: 1x1 unidad (32x32 píxeles)
 **Estados:**
 
 1. **IDLE (Sin selección)**
-   - Presionar F/E/M → Cambia a FIRST_SELECTED
+   - Presionar E/R/T → Cambia a FIRST_SELECTED
    - Mostrar: UI normal
 
 2. **FIRST_SELECTED (Una runa seleccionada)**
    - Highlight en runa seleccionada (borde dorado + brillo)
    - Presionar misma tecla → Mantiene selección
-   - Presionar otra runa (F/E/M) → Cambia a COMBO_READY
+   - Presionar otra runa (E/R/T) → Cambia a COMBO_READY
    - Presionar Espacio → Ejecuta runa individual + vuelve a IDLE
-   - Presionar ESC → Vuelve a IDLE
+   - Presionar TAB → Vuelve a IDLE
 
 3. **COMBO_READY (Dos runas seleccionadas)**
    - Highlight en ambas runas + icono de combinación entre ellas
    - Texto en pantalla: "ESPACIO para combinar"
    - Presionar Espacio → Ejecuta combinación + vuelve a IDLE
-   - Presionar ESC → Vuelve a IDLE
+   - Presionar TAB → Vuelve a IDLE
    - No se puede seleccionar tercera runa
 
 4. **COOLDOWN (Habilidad en enfriamiento)**
@@ -349,16 +349,16 @@ Tamaño visual del jugador: 1x1 unidad (32x32 píxeles)
    - Hacia mouse > última dirección > arriba por defecto
 2. Efectos por tipo de objeto:
    - **Enemigos:**
-     - Empujados 2 unidades en dirección del empuje
-     - Aturdidos (no pueden moverse ni atacar) 0.8s
-     - Interrumpe animaciones de ataque
-     - Si chocan con pared/obstáculo, se detienen inmediatamente
+	 - Empujados 2 unidades en dirección del empuje
+	 - Aturdidos (no pueden moverse ni atacar) 0.8s
+	 - Interrumpe animaciones de ataque
+	 - Si chocan con pared/obstáculo, se detienen inmediatamente
    - **Bloques Empujables:**
-     - Se mueven EXACTAMENTE 1 celda del grid en dirección del empuje
-     - Si la celda destino está ocupada, NO se mueven
-     - Solo afecta bloques que estén directamente alineados (no en diagonal)
+	 - Se mueven EXACTAMENTE 1 celda del grid en dirección del empuje
+	 - Si la celda destino está ocupada, NO se mueven
+	 - Solo afecta bloques que estén directamente alineados (no en diagonal)
    - **Objetos Destructibles:**
-     - NO se destruyen (solo se empujan si es posible)
+	 - NO se destruyen (solo se empujan si es posible)
 3. Múltiples objetos:
    - Pueden ser afectados simultáneamente si están en el área
 4. NO atraviesa paredes (el cono se corta al encontrar obstáculo)
@@ -392,14 +392,14 @@ Tamaño visual del jugador: 1x1 unidad (32x32 píxeles)
 2. **Combinaciones:**
    - Al usar una combinación, AMBAS runas entran en cooldown
    - Ejemplo: Usar Dardo Ígneo (F+M):
-     - Fuego: 12s de cooldown
-     - Movimiento: 12s de cooldown
+	 - Fuego: 12s de cooldown
+	 - Movimiento: 12s de cooldown
    - Los cooldowns de las combinaciones siempre son más largos que los individuales
 
 3. **Cooldowns Activos Simultáneos:**
    - Se pueden tener múltiples cooldowns activos
    - Ejemplo: Usar Fuego individual (10s) y luego Escudo individual (14s):
-     - Mientras esperas el Escudo, puedes usar Movimiento
+	 - Mientras esperas el Escudo, puedes usar Movimiento
 
 **Tabla de Cooldowns:**
 
@@ -444,18 +444,18 @@ Tamaño visual del jugador: 1x1 unidad (32x32 píxeles)
    - Velocidad: 3 unidades/segundo (velocidad normal)
    - Pathfinding: Directo, no rodea obstáculos (se atora en paredes)
    - Transición:
-     - Si jugador sale del radio de detección (8u) por 3 segundos → RETURN
-     - Si jugador entra en radio de ataque → ATTACK
+	 - Si jugador sale del radio de detección (8u) por 3 segundos → RETURN
+	 - Si jugador entra en radio de ataque → ATTACK
 
 3. **ATTACK (Ataque):**
    - Comportamiento:
-     - Se detiene (velocidad = 0)
-     - Animación de ataque (0.5s): Levanta brazos
-     - Golpe (0.2s): Inflige daño si jugador sigue en rango
-     - Cooldown (2s): Espera antes de siguiente ataque
+	 - Se detiene (velocidad = 0)
+	 - Animación de ataque (0.5s): Levanta brazos
+	 - Golpe (0.2s): Inflige daño si jugador sigue en rango
+	 - Cooldown (2s): Espera antes de siguiente ataque
    - Transición:
-     - Si jugador sale del radio de ataque → CHASE
-     - Si recibe aturdimiento (Onda Cinética) → STUNNED
+	 - Si jugador sale del radio de ataque → CHASE
+	 - Si recibe aturdimiento (Onda Cinética) → STUNNED
 
 4. **STUNNED (Aturdido):**
    - Comportamiento: Inmóvil, no ataca, no persigue
@@ -467,8 +467,8 @@ Tamaño visual del jugador: 1x1 unidad (32x32 píxeles)
    - Comportamiento: Vuelve al waypoint más cercano
    - Velocidad: 2 unidades/segundo
    - Transición:
-     - Al llegar al waypoint → PATROL
-     - Si jugador entra en radio de detección → CHASE
+	 - Al llegar al waypoint → PATROL
+	 - Si jugador entra en radio de detección → CHASE
 
 **Comportamientos Especiales:**
 - Si recibe knockback: Mantiene estado actual, solo se desplaza
@@ -506,8 +506,8 @@ Tamaño visual del jugador: 1x1 unidad (32x32 píxeles)
 - **Comportamiento:**
   1. Preparación (1s): Se detiene, sprite brilla rojo, mira hacia jugador
   2. Ejecución: Dash en línea recta hacia la posición del jugador (no tracking)
-     - Velocidad: 12 unidades/segundo
-     - Distancia: Hasta golpear pared/pilar o 10 unidades
+	 - Velocidad: 12 unidades/segundo
+	 - Distancia: Hasta golpear pared/pilar o 10 unidades
   3. Si golpea pilar: Destruye el pilar + se aturde 1 segundo
   4. Si golpea jugador: 4 HP de daño + knockback de 2 unidades
   5. Recuperación (0.5s): Se detiene, sacude cabeza
@@ -518,9 +518,9 @@ Tamaño visual del jugador: 1x1 unidad (32x32 píxeles)
 - **Comportamiento:**
   1. Preparación (0.8s): Levanta arma/brazos, aura púrpura
   2. Ejecución: Golpe AoE circular
-     - Radio: 3 unidades (centrado en jefe)
-     - Daño: 3 HP
-     - Knockback: 1.5 unidades (radial)
+	 - Radio: 3 unidades (centrado en jefe)
+	 - Daño: 3 HP
+	 - Knockback: 1.5 unidades (radial)
   3. Recuperación (0.5s): Vulnerable, no se mueve
 - **Contraataque:** Alejarse más de 3 unidades o usar Destello para esquivar
 
@@ -550,10 +550,10 @@ Tamaño visual del jugador: 1x1 unidad (32x32 píxeles)
 - **Comportamiento:**
   1. Slam (igual que Fase 1): 3 unidades, 3 HP
   2. Inmediatamente después: Onda de choque secundaria
-     - Radio: 5 unidades (más grande que el slam)
-     - Daño: 2 HP
-     - No tiene knockback
-     - Delay: 0.5s después del slam
+	 - Radio: 5 unidades (más grande que el slam)
+	 - Daño: 2 HP
+	 - No tiene knockback
+	 - Delay: 0.5s después del slam
   3. Recuperación (0.3s): Menos tiempo vulnerable
 - **Contraataque:** Destello hacia afuera después del primer impacto, o Escudo para absorber ambos golpes
 
@@ -562,10 +562,10 @@ Tamaño visual del jugador: 1x1 unidad (32x32 píxeles)
 - **Comportamiento:**
   1. Preparación (1s): Se detiene, tres orbes negros orbitan alrededor del jefe
   2. Disparo: Lanza los 3 proyectiles secuencialmente (0.2s entre cada uno) hacia el jugador
-     - Velocidad: 6 unidades/segundo
-     - Daño: 2 HP cada uno
-     - Tracking: Apuntan hacia posición del jugador al momento del disparo
-     - Desaparecen al golpear jugador/pared o después de 8 unidades
+	 - Velocidad: 6 unidades/segundo
+	 - Daño: 2 HP cada uno
+	 - Tracking: Apuntan hacia posición del jugador al momento del disparo
+	 - Desaparecen al golpear jugador/pared o después de 8 unidades
   3. Recuperación (0.5s)
 - **Contraataque:** Movimiento errático o Destello para esquivar, Escudo para bloquear
 
@@ -622,19 +622,19 @@ Tutorial → Sala 1 (Bosque) → Sala 2 (Ruinas) → Sala 3 (Caverna) → Sala J
 **Layout:**
 ```
 [Entrada]
-    ↓
+	↓
 [Sección 1: Movimiento] → Cartel: "WASD para moverte"
-    ↓
+	↓
 [Sección 2: Ataque] → Dummy invulnerable + Cartel: "CLICK IZQ / J para atacar"
-    ↓
+	↓
 [Sección 3: Runas] → 3 Carteles:
-    - "F: Runa de Fuego (+Daño)"
-    - "M: Destello (Dash)"
-    - "E: Escudo (Protección)"
-    ↓
+	- "F: Runa de Fuego (+Daño)"
+	- "M: Destello (Dash)"
+	- "E: Escudo (Protección)"
+	↓
 [Sección 4: Combinación] → Cartel: "Presiona F, luego M, luego ESPACIO"
-    → Dummy con 6 HP (justo lo necesario para 1 Dardo Ígneo)
-    ↓
+	→ Dummy con 6 HP (justo lo necesario para 1 Dardo Ígneo)
+	↓
 [Salida] → Puerta a Sala 1
 ```
 
@@ -657,18 +657,18 @@ Tutorial → Sala 1 (Bosque) → Sala 2 (Ruinas) → Sala 3 (Caverna) → Sala J
 
 **Layout:**
 ```
-        [Entrada desde Tutorial]
-                ↓
-    [Área Segura - 3x3 unidades]
-                ↓
-    [Zona de Combate Principal]
-    - 2 Sombras Corruptas patrullando
-    - Árboles como obstáculos (bloqueadores de visión)
-                ↓
-        [Cofre opcional]
-    (Recupera 15 de maná)
-                ↓
-        [Salida a Sala 2]
+		[Entrada desde Tutorial]
+				↓
+	[Área Segura - 3x3 unidades]
+				↓
+	[Zona de Combate Principal]
+	- 2 Sombras Corruptas patrullando
+	- Árboles como obstáculos (bloqueadores de visión)
+				↓
+		[Cofre opcional]
+	(Recupera 15 de maná)
+				↓
+		[Salida a Sala 2]
 ```
 
 **Elementos:**
@@ -700,23 +700,23 @@ Tutorial → Sala 1 (Bosque) → Sala 2 (Ruinas) → Sala 3 (Caverna) → Sala J
 
 **Layout:**
 ```
-    [Entrada desde Sala 1]
-            ↓
-    [Puzzle de Bloques]
-    ┌─────────────┐
-    │ □ □ □       │  □ = Bloque empujable
-    │   ☼         │  ☼ = Interruptor de presión
-    │ □ E □       │  E = Enemigo estático
-    │             │  P = Placa de presión (objetivo)
-    │      P      │
-    └─────────────┘
-            ↓
-    [Puerta Desbloqueada]
-            ↓
-    [Zona de Combate]
-    - 3 Sombras Corruptas
-            ↓
-    [Salida a Sala 3]
+	[Entrada desde Sala 1]
+			↓
+	[Puzzle de Bloques]
+	┌─────────────┐
+	│ □ □ □       │  □ = Bloque empujable
+	│   ☼         │  ☼ = Interruptor de presión
+	│ □ E □       │  E = Enemigo estático
+	│             │  P = Placa de presión (objetivo)
+	│      P      │
+	└─────────────┘
+			↓
+	[Puerta Desbloqueada]
+			↓
+	[Zona de Combate]
+	- 3 Sombras Corruptas
+			↓
+	[Salida a Sala 3]
 ```
 
 **Puzzle:**
@@ -755,28 +755,28 @@ Tutorial → Sala 1 (Bosque) → Sala 2 (Ruinas) → Sala 3 (Caverna) → Sala J
 
 **Layout:**
 ```
-        [Entrada desde Sala 2]
-                ↓
-        [Pasillo Estrecho]
-    (2 Sombras patrullando)
-                ↓
-    [Cámara de Cristales - Puzzle]
-    ┌─────────────────┐
-    │  ◊   ◊   ◊      │  ◊ = Cristal destructible (3 HP)
-    │    □   □        │  □ = Bloque
-    │  E   ☼   E      │  ☼ = Interruptor central
-    │    □   □        │  E = Enemigo
-    │  ◊   ◊   ◊      │  
-    └─────────────────┘
-                ↓
-        [Arena de Combate]
-    - 4 Sombras Corruptas
-    - Espacio abierto
-                ↓
-        [Checkpoint]
-    (Restaura vida completa)
-                ↓
-        [Salida a Sala Jefe]
+		[Entrada desde Sala 2]
+				↓
+		[Pasillo Estrecho]
+	(2 Sombras patrullando)
+				↓
+	[Cámara de Cristales - Puzzle]
+	┌─────────────────┐
+	│  ◊   ◊   ◊      │  ◊ = Cristal destructible (3 HP)
+	│    □   □        │  □ = Bloque
+	│  E   ☼   E      │  ☼ = Interruptor central
+	│    □   □        │  E = Enemigo
+	│  ◊   ◊   ◊      │  
+	└─────────────────┘
+				↓
+		[Arena de Combate]
+	- 4 Sombras Corruptas
+	- Espacio abierto
+				↓
+		[Checkpoint]
+	(Restaura vida completa)
+				↓
+		[Salida a Sala Jefe]
 ```
 
 **Puzzle de Cristales:**
@@ -817,24 +817,24 @@ Tutorial → Sala 1 (Bosque) → Sala 2 (Ruinas) → Sala 3 (Caverna) → Sala J
 
 **Layout:**
 ```
-        [Entrada desde Sala 3]
-                ↓
-    [Plataforma de Inicio]
-    (Safe zone, 3 segundos antes de que jefe active)
-                ↓
-        [Arena Circular]
-    
-         P           P
-            \     /
-              \ /
-        ───────◉───────  ◉ = Jefe (centro)
-              / \        P = Pilar (10 HP)
-            /     \
-         P           P
-    
-    Radio: 7.5 unidades
-    4 Pilares destructibles en puntos cardinales
-    Cristal central (decorativo, invulnerable)
+		[Entrada desde Sala 3]
+				↓
+	[Plataforma de Inicio]
+	(Safe zone, 3 segundos antes de que jefe active)
+				↓
+		[Arena Circular]
+	
+		 P           P
+			\     /
+			  \ /
+		───────◉───────  ◉ = Jefe (centro)
+			  / \        P = Pilar (10 HP)
+			/     \
+		 P           P
+	
+	Radio: 7.5 unidades
+	4 Pilares destructibles en puntos cardinales
+	Cristal central (decorativo, invulnerable)
 ```
 
 **Elementos:**
@@ -873,30 +873,30 @@ Ver sección 4.2 (descripción del jefe)
 ### 5.7 Mapa de Conexiones
 
 ```
-    ┌─────────────┐
-    │  TUTORIAL   │
-    │   (Sala 0)  │
-    └──────┬──────┘
-           │
-    ┌──────▼──────┐
-    │   BOSQUE    │
-    │   (Sala 1)  │
-    └──────┬──────┘
-           │
-    ┌──────▼──────┐
-    │   RUINAS    │
-    │   (Sala 2)  │
-    └──────┬──────┘
-           │
-    ┌──────▼──────┐
-    │  CAVERNA    │
-    │   (Sala 3)  │
-    └──────┬──────┘
-           │
-    ┌──────▼──────┐
-    │  SALA JEFE  │
-    │   (Final)   │
-    └─────────────┘
+	┌─────────────┐
+	│  TUTORIAL   │
+	│   (Sala 0)  │
+	└──────┬──────┘
+		   │
+	┌──────▼──────┐
+	│   BOSQUE    │
+	│   (Sala 1)  │
+	└──────┬──────┘
+		   │
+	┌──────▼──────┐
+	│   RUINAS    │
+	│   (Sala 2)  │
+	└──────┬──────┘
+		   │
+	┌──────▼──────┐
+	│  CAVERNA    │
+	│   (Sala 3)  │
+	└──────┬──────┘
+		   │
+	┌──────▼──────┐
+	│  SALA JEFE  │
+	│   (Final)   │
+	└─────────────┘
 ```
 
 **Notas de Diseño:**
@@ -931,47 +931,47 @@ Ver sección 4.2 (descripción del jefe)
    - Posición: Esquina superior izquierda (10px margin)
    - Tamaño: 200px ancho x 30px alto
    - Diseño:
-     - Corazones visuales: 5 corazones, cada uno = 4 HP
-     - Color: Rojo (#FF0000) cuando lleno, Gris oscuro (#333333) cuando vacío
-     - Texto: "20/20 HP" alineado a la derecha de los corazones
-     - Animación: Parpadeo rojo al recibir daño + sacudida de 2px
+	 - Corazones visuales: 5 corazones, cada uno = 4 HP
+	 - Color: Rojo (#FF0000) cuando lleno, Gris oscuro (#333333) cuando vacío
+	 - Texto: "20/20 HP" alineado a la derecha de los corazones
+	 - Animación: Parpadeo rojo al recibir daño + sacudida de 2px
 
 2. **Barra de Maná (Below HP):**
    - Posición: Debajo de barra de vida (5px gap)
    - Tamaño: 200px ancho x 20px alto
    - Diseño:
-     - Barra líquida azul (#00AAFF) con gradiente
-     - Borde: 2px negro
-     - Texto: "50/50 MP" centrado sobre la barra
-     - Animación: Onda suave al regenerarse (efecto "agua")
+	 - Barra líquida azul (#00AAFF) con gradiente
+	 - Borde: 2px negro
+	 - Texto: "50/50 MP" centrado sobre la barra
+	 - Animación: Onda suave al regenerarse (efecto "agua")
 
 3. **Iconos de Runas (Top-Right):**
    - Posición: Esquina superior derecha (10px margin)
    - Tamaño: 3 iconos de 48x48px cada uno, espaciados 10px
    - Layout:
-     ```
-     [F]  [E]  [M]
-     [8s][14s][8s]
-     ```
+	 ```
+	 [F]  [E]  [M]
+	 [8s][14s][8s]
+	 ```
    - Estados:
-     - **Disponible:** Color completo + brillo suave
-     - **Seleccionada:** Borde dorado (4px) + escala 110%
-     - **En cooldown:** Gris + overlay circular que se vacía (tipo reloj)
-     - **Sin maná:** Gris + icono de maná tachado
+	 - **Disponible:** Color completo + brillo suave
+	 - **Seleccionada:** Borde dorado (4px) + escala 110%
+	 - **En cooldown:** Gris + overlay circular que se vacía (tipo reloj)
+	 - **Sin maná:** Gris + icono de maná tachado
    - Cooldown Timer:
-     - Texto blanco con sombra negra
-     - Tamaño: 14px font
-     - Actualiza cada 0.1s
-     - Formato: "12.3s" o "0.8s"
+	 - Texto blanco con sombra negra
+	 - Tamaño: 14px font
+	 - Actualiza cada 0.1s
+	 - Formato: "12.3s" o "0.8s"
 
 4. **Indicador de Combinación (Center-Top, temporal):**
    - Aparece solo cuando hay 2 runas seleccionadas
    - Posición: Centro superior (debajo del borde, 50px desde top)
    - Diseño:
-     - Texto: "ESPACIO para [Nombre de Combo]"
-     - Fondo: Semi-transparente negro (80% opacity)
-     - Tamaño: 300px ancho x 40px alto
-     - Animación: Fade in (0.2s) al aparecer
+	 - Texto: "ESPACIO para [Nombre de Combo]"
+	 - Fondo: Semi-transparente negro (80% opacity)
+	 - Tamaño: 300px ancho x 40px alto
+	 - Animación: Fade in (0.2s) al aparecer
    - Ejemplo: "ESPACIO para Dardo Ígneo"
 
 ---
@@ -1026,7 +1026,7 @@ Ver sección 4.2 (descripción del jefe)
 ║    E - Runa de Escudo          ║
 ║    M - Runa de Movimiento      ║
 ║    ESPACIO - Confirmar combo   ║
-║    ESC - Cancelar selección    ║
+║    TAB - Cancelar selección    ║
 ║                                ║
 ║      [    VOLVER    ]          ║
 ╚════════════════════════════════╝
@@ -1473,10 +1473,10 @@ Jefe:
 │   ├── Room3_Cave.scene
 │   └── Room4_Boss.scene
 └── /Prefabs
-    ├── Player.prefab
-    ├── ShadowEnemy.prefab
-    ├── Boss.prefab
-    └── /Projectiles
+	├── Player.prefab
+	├── ShadowEnemy.prefab
+	├── Boss.prefab
+	└── /Projectiles
 ```
 
 ---
@@ -1487,61 +1487,61 @@ Jefe:
 
 ```
 class RuneSystem:
-    selectedRunes = []  // Array de runas seleccionadas (max 2)
-    
-    function SelectRune(runeType):
-        if runeType is in cooldown:
-            PlaySound("error")
-            return
-            
-        if player.mana < runeType.manaCost:
-            PlaySound("no_mana")
-            return
-            
-        if selectedRunes.length == 0:
-            selectedRunes.add(runeType)
-            UpdateUI_Highlight(runeType)
-            PlaySound("select")
-            
-        else if selectedRunes.length == 1:
-            if selectedRunes[0] == runeType:
-                // Misma runa, no hacer nada o ejecutar individual
-                return
-            else:
-                selectedRunes.add(runeType)
-                UpdateUI_ComboReady()
-                PlaySound("combo_ready")
-    
-    function ConfirmAbility():
-        if selectedRunes.length == 1:
-            ExecuteIndividualRune(selectedRunes[0])
-        else if selectedRunes.length == 2:
-            ExecuteCombination(selectedRunes[0], selectedRunes[1])
-        
-        ClearSelection()
-    
-    function ExecuteCombination(rune1, rune2):
-        comboKey = SortedPair(rune1, rune2)  // "Fire_Dash"
-        
-        switch comboKey:
-            case "Fire_Dash":
-                FireDart()
-            case "Fire_Shield":
-                CoreBurst()
-            case "Shield_Dash":
-                KineticWave()
-        
-        // Aplicar cooldowns a AMBAS runas
-        rune1.StartCooldown()
-        rune2.StartCooldown()
-        
-        // Consumir maná
-        player.ConsumeMana(combo.manaCost)
-    
-    function CancelSelection():
-        selectedRunes.clear()
-        UpdateUI_ClearHighlight()
-        PlaySound("cancel")
+	selectedRunes = []  // Array de runas seleccionadas (max 2)
+	
+	function SelectRune(runeType):
+		if runeType is in cooldown:
+			PlaySound("error")
+			return
+			
+		if player.mana < runeType.manaCost:
+			PlaySound("no_mana")
+			return
+			
+		if selectedRunes.length == 0:
+			selectedRunes.add(runeType)
+			UpdateUI_Highlight(runeType)
+			PlaySound("select")
+			
+		else if selectedRunes.length == 1:
+			if selectedRunes[0] == runeType:
+				// Misma runa, no hacer nada o ejecutar individual
+				return
+			else:
+				selectedRunes.add(runeType)
+				UpdateUI_ComboReady()
+				PlaySound("combo_ready")
+	
+	function ConfirmAbility():
+		if selectedRunes.length == 1:
+			ExecuteIndividualRune(selectedRunes[0])
+		else if selectedRunes.length == 2:
+			ExecuteCombination(selectedRunes[0], selectedRunes[1])
+		
+		ClearSelection()
+	
+	function ExecuteCombination(rune1, rune2):
+		comboKey = SortedPair(rune1, rune2)  // "Fire_Dash"
+		
+		switch comboKey:
+			case "Fire_Dash":
+				FireDart()
+			case "Fire_Shield":
+				CoreBurst()
+			case "Shield_Dash":
+				KineticWave()
+		
+		// Aplicar cooldowns a AMBAS runas
+		rune1.StartCooldown()
+		rune2.StartCooldown()
+		
+		// Consumir maná
+		player.ConsumeMana(combo.manaCost)
+	
+	function CancelSelection():
+		selectedRunes.clear()
+		UpdateUI_ClearHighlight()
+		PlaySound("cancel")
 ```
 
 ---
@@ -1550,33 +1550,33 @@ class RuneSystem:
 
 ```
 class Cooldown:
-    duration = 0
-    remainingTime = 0
-    isActive = false
-    
-    function Start(seconds):
-        duration = seconds
-        remainingTime = seconds
-        isActive = true
-    
-    function Update(deltaTime):
-        if isActive:
-            remainingTime -= deltaTime
-            
-            if remainingTime <= 0:
-                remainingTime = 0
-                isActive = false
-                OnCooldownComplete()
-    
-    function IsReady():
-        return !isActive
-    
-    function GetProgress():
-        return 1 - (remainingTime / duration)  // 0 a 1
-    
-    function OnCooldownComplete():
-        PlaySound("cooldown_ready")
-        UpdateUI_RuneAvailable()
+	duration = 0
+	remainingTime = 0
+	isActive = false
+	
+	function Start(seconds):
+		duration = seconds
+		remainingTime = seconds
+		isActive = true
+	
+	function Update(deltaTime):
+		if isActive:
+			remainingTime -= deltaTime
+			
+			if remainingTime <= 0:
+				remainingTime = 0
+				isActive = false
+				OnCooldownComplete()
+	
+	function IsReady():
+		return !isActive
+	
+	function GetProgress():
+		return 1 - (remainingTime / duration)  // 0 a 1
+	
+	function OnCooldownComplete():
+		PlaySound("cooldown_ready")
+		UpdateUI_RuneAvailable()
 ```
 
 ---
@@ -1585,49 +1585,49 @@ class Cooldown:
 
 ```
 class HealthSystem:
-    maxHealth = 20
-    currentHealth = 20
-    isInvulnerable = false
-    invulnerabilityTimer = 0
-    
-    function TakeDamage(amount):
-        if isInvulnerable:
-            return
-        
-        currentHealth -= amount
-        currentHealth = Clamp(currentHealth, 0, maxHealth)
-        
-        UpdateUI_Health()
-        PlaySound("player_hurt")
-        StartInvulnerability(1.0)  // 1 segundo
-        
-        if currentHealth <= 0:
-            Die()
-    
-    function StartInvulnerability(duration):
-        isInvulnerable = true
-        invulnerabilityTimer = duration
-        StartFlashAnimation()  // 4 flashes
-    
-    function Update(deltaTime):
-        if isInvulnerable:
-            invulnerabilityTimer -= deltaTime
-            
-            if invulnerabilityTimer <= 0:
-                isInvulnerable = false
-                StopFlashAnimation()
-    
-    function Heal(amount):
-        currentHealth += amount
-        currentHealth = Clamp(currentHealth, 0, maxHealth)
-        UpdateUI_Health()
-        PlaySound("heal")
-    
-    function Die():
-        PlaySound("player_death")
-        PlayAnimation("death")
-        Wait(1.5)  // Esperar animación
-        ShowDeathScreen()
+	maxHealth = 20
+	currentHealth = 20
+	isInvulnerable = false
+	invulnerabilityTimer = 0
+	
+	function TakeDamage(amount):
+		if isInvulnerable:
+			return
+		
+		currentHealth -= amount
+		currentHealth = Clamp(currentHealth, 0, maxHealth)
+		
+		UpdateUI_Health()
+		PlaySound("player_hurt")
+		StartInvulnerability(1.0)  // 1 segundo
+		
+		if currentHealth <= 0:
+			Die()
+	
+	function StartInvulnerability(duration):
+		isInvulnerable = true
+		invulnerabilityTimer = duration
+		StartFlashAnimation()  // 4 flashes
+	
+	function Update(deltaTime):
+		if isInvulnerable:
+			invulnerabilityTimer -= deltaTime
+			
+			if invulnerabilityTimer <= 0:
+				isInvulnerable = false
+				StopFlashAnimation()
+	
+	function Heal(amount):
+		currentHealth += amount
+		currentHealth = Clamp(currentHealth, 0, maxHealth)
+		UpdateUI_Health()
+		PlaySound("heal")
+	
+	function Die():
+		PlaySound("player_death")
+		PlayAnimation("death")
+		Wait(1.5)  // Esperar animación
+		ShowDeathScreen()
 ```
 
 ---
@@ -1636,36 +1636,36 @@ class HealthSystem:
 
 ```
 class ManaSystem:
-    maxMana = 50
-    currentMana = 50
-    regenRate = 2  // puntos por segundo
-    regenDelay = 1  // segundos después del último uso
-    timeSinceLastUse = 999
-    
-    function ConsumeMana(amount):
-        if currentMana < amount:
-            return false
-        
-        currentMana -= amount
-        timeSinceLastUse = 0
-        UpdateUI_Mana()
-        return true
-    
-    function Update(deltaTime):
-        timeSinceLastUse += deltaTime
-        
-        // Comenzar regeneración después del delay
-        if timeSinceLastUse >= regenDelay:
-            Regenerate(regenRate * deltaTime)
-    
-    function Regenerate(amount):
-        if currentMana < maxMana:
-            currentMana += amount
-            currentMana = Clamp(currentMana, 0, maxMana)
-            UpdateUI_Mana()
-    
-    function HasEnoughMana(amount):
-        return currentMana >= amount
+	maxMana = 50
+	currentMana = 50
+	regenRate = 2  // puntos por segundo
+	regenDelay = 1  // segundos después del último uso
+	timeSinceLastUse = 999
+	
+	function ConsumeMana(amount):
+		if currentMana < amount:
+			return false
+		
+		currentMana -= amount
+		timeSinceLastUse = 0
+		UpdateUI_Mana()
+		return true
+	
+	function Update(deltaTime):
+		timeSinceLastUse += deltaTime
+		
+		// Comenzar regeneración después del delay
+		if timeSinceLastUse >= regenDelay:
+			Regenerate(regenRate * deltaTime)
+	
+	function Regenerate(amount):
+		if currentMana < maxMana:
+			currentMana += amount
+			currentMana = Clamp(currentMana, 0, maxMana)
+			UpdateUI_Mana()
+	
+	function HasEnoughMana(amount):
+		return currentMana >= amount
 ```
 
 ---
@@ -1674,84 +1674,84 @@ class ManaSystem:
 
 ```
 enum EnemyState:
-    PATROL
-    CHASE
-    ATTACK
-    STUNNED
-    RETURN
+	PATROL
+	CHASE
+	ATTACK
+	STUNNED
+	RETURN
 
 class ShadowEnemy:
-    currentState = PATROL
-    detectionRadius = 8
-    attackRadius = 1.5
-    patrolSpeed = 1.5
-    chaseSpeed = 3.0
-    attackCooldown = 2.0
-    currentWaypoint = 0
-    waypoints = []  // Definidos en editor
-    
-    function Update(deltaTime):
-        distanceToPlayer = Distance(self, player)
-        
-        switch currentState:
-            case PATROL:
-                Patrol(deltaTime)
-                if distanceToPlayer <= detectionRadius:
-                    TransitionTo(CHASE)
-                    
-            case CHASE:
-                ChasePlayer(deltaTime)
-                if distanceToPlayer > detectionRadius + 2:  // Hysteresis
-                    losePlayerTimer += deltaTime
-                    if losePlayerTimer > 3:
-                        TransitionTo(RETURN)
-                else:
-                    losePlayerTimer = 0
-                
-                if distanceToPlayer <= attackRadius:
-                    TransitionTo(ATTACK)
-                    
-            case ATTACK:
-                AttackPlayer(deltaTime)
-                if distanceToPlayer > attackRadius:
-                    TransitionTo(CHASE)
-                    
-            case STUNNED:
-                stunTimer -= deltaTime
-                if stunTimer <= 0:
-                    TransitionTo(CHASE)
-                    
-            case RETURN:
-                ReturnToWaypoint(deltaTime)
-                if ReachedWaypoint():
-                    TransitionTo(PATROL)
-                if distanceToPlayer <= detectionRadius:
-                    TransitionTo(CHASE)
-    
-    function Patrol(deltaTime):
-        MoveTowards(waypoints[currentWaypoint], patrolSpeed * deltaTime)
-        
-        if ReachedWaypoint():
-            currentWaypoint = (currentWaypoint + 1) % waypoints.length
-    
-    function ChasePlayer(deltaTime):
-        direction = Normalize(player.position - self.position)
-        Move(direction * chaseSpeed * deltaTime)
-    
-    function AttackPlayer(deltaTime):
-        if attackCooldown.IsReady():
-            PlayAnimation("attack")
-            Wait(0.5)  // Windup
-            
-            if DistanceToPlayer() <= attackRadius:  // Check again
-                player.TakeDamage(2)
-            
-            attackCooldown.Start(2.0)
-    
-    function OnStunned(duration):
-        TransitionTo(STUNNED)
-        stunTimer = duration
-        PlayAnimation("stunned")
+	currentState = PATROL
+	detectionRadius = 8
+	attackRadius = 1.5
+	patrolSpeed = 1.5
+	chaseSpeed = 3.0
+	attackCooldown = 2.0
+	currentWaypoint = 0
+	waypoints = []  // Definidos en editor
+	
+	function Update(deltaTime):
+		distanceToPlayer = Distance(self, player)
+		
+		switch currentState:
+			case PATROL:
+				Patrol(deltaTime)
+				if distanceToPlayer <= detectionRadius:
+					TransitionTo(CHASE)
+					
+			case CHASE:
+				ChasePlayer(deltaTime)
+				if distanceToPlayer > detectionRadius + 2:  // Hysteresis
+					losePlayerTimer += deltaTime
+					if losePlayerTimer > 3:
+						TransitionTo(RETURN)
+				else:
+					losePlayerTimer = 0
+				
+				if distanceToPlayer <= attackRadius:
+					TransitionTo(ATTACK)
+					
+			case ATTACK:
+				AttackPlayer(deltaTime)
+				if distanceToPlayer > attackRadius:
+					TransitionTo(CHASE)
+					
+			case STUNNED:
+				stunTimer -= deltaTime
+				if stunTimer <= 0:
+					TransitionTo(CHASE)
+					
+			case RETURN:
+				ReturnToWaypoint(deltaTime)
+				if ReachedWaypoint():
+					TransitionTo(PATROL)
+				if distanceToPlayer <= detectionRadius:
+					TransitionTo(CHASE)
+	
+	function Patrol(deltaTime):
+		MoveTowards(waypoints[currentWaypoint], patrolSpeed * deltaTime)
+		
+		if ReachedWaypoint():
+			currentWaypoint = (currentWaypoint + 1) % waypoints.length
+	
+	function ChasePlayer(deltaTime):
+		direction = Normalize(player.position - self.position)
+		Move(direction * chaseSpeed * deltaTime)
+	
+	function AttackPlayer(deltaTime):
+		if attackCooldown.IsReady():
+			PlayAnimation("attack")
+			Wait(0.5)  // Windup
+			
+			if DistanceToPlayer() <= attackRadius:  // Check again
+				player.TakeDamage(2)
+			
+			attackCooldown.Start(2.0)
+	
+	function OnStunned(duration):
+		TransitionTo(STUNNED)
+		stunTimer = duration
+		PlayAnimation("stunned")
 ```
 
 ---
@@ -2330,38 +2330,38 @@ Este MVP es la **base sólida** para un juego potencialmente más grande:
 
 #### Flowchart 1: Sistema de Selección de Runas
 ```
-[Jugador presiona F/E/M]
-        ↓
-    ¿Runa en cooldown?
-    /              \
+[Jugador presiona E/R/T]
+		↓
+	¿Runa en cooldown?
+	/              \
   SÍ               NO
    ↓                ↓
 [Sonido error]  ¿Suficiente maná?
 [Return]        /              \
-              SÍ               NO
-               ↓                ↓
-       ¿selectedRunes = 0?  [Sonido no_mana]
-       /              \      [Return]
-     SÍ               NO
-      ↓                ↓
+			  SÍ               NO
+			   ↓                ↓
+	   ¿selectedRunes = 0?  [Sonido no_mana]
+	   /              \      [Return]
+	 SÍ               NO
+	  ↓                ↓
 [Add runa]      ¿selectedRunes = 1?
 [Highlight UI]  /              \
 [Sonido select] SÍ             NO (= 2)
-                ↓               ↓
-         ¿Misma runa?      [Imposible]
-         /          \
-       SÍ           NO
-        ↓            ↓
-    [Return]    [Add segunda runa]
-                [Mostrar "ESPACIO para combo"]
-                [Sonido combo_ready]
-                        ↓
-                [Esperar ESPACIO]
-                        ↓
-                [Ejecutar Combinación]
-                [Aplicar cooldowns × 2]
-                [Consumir maná]
-                [Clear selection]
+				↓               ↓
+		 ¿Misma runa?      [Imposible]
+		 /          \
+	   SÍ           NO
+		↓            ↓
+	[Return]    [Add segunda runa]
+				[Mostrar "ESPACIO para combo"]
+				[Sonido combo_ready]
+						↓
+				[Esperar ESPACIO]
+						↓
+				[Ejecutar Combinación]
+				[Aplicar cooldowns × 2]
+				[Consumir maná]
+				[Clear selection]
 ```
 
 ---
@@ -2369,42 +2369,42 @@ Este MVP es la **base sólida** para un juego potencialmente más grande:
 #### Flowchart 2: Sistema de Combate (Recibir Daño)
 ```
 [Enemigo ataca al jugador]
-        ↓
-    ¿Jugador invulnerable?
-    /              \
+		↓
+	¿Jugador invulnerable?
+	/              \
   SÍ               NO
    ↓                ↓
 [Ignorar]    ¿Escudo activo?
 [Return]     /              \
-           SÍ               NO
-            ↓                ↓
-    [Escudo absorbe]  [Jugador recibe daño]
-    [Reducir HP escudo] [HP -= daño]
-            ↓                ↓
-    ¿Escudo roto?      ¿HP <= 0?
-    /          \       /          \
+		   SÍ               NO
+			↓                ↓
+	[Escudo absorbe]  [Jugador recibe daño]
+	[Reducir HP escudo] [HP -= daño]
+			↓                ↓
+	¿Escudo roto?      ¿HP <= 0?
+	/          \       /          \
   SÍ           NO    SÍ           NO
    ↓            ↓     ↓            ↓
 [40% reducción] [Return] [Morir]  [Invulnerabilidad 1s]
 [1s duración]              ↓      [Flash animación]
    ↓                    [Animación] [Sonido hurt]
 [Return]                [Pantalla muerte] [Return]
-                              ↓
-                        [Reintentar sala]
+							  ↓
+						[Reintentar sala]
 ```
 
 ---
 
 #### Flowchart 3: IA Enemiga (Transiciones de Estado)
 ```
-                [PATROL]
-                    ↓
-        ¿Jugador en radio detección?
-        /                      \
-      SÍ                       NO
-       ↓                        ↓
-    [CHASE]              [Seguir patrullando]
-       ↓
+				[PATROL]
+					↓
+		¿Jugador en radio detección?
+		/                      \
+	  SÍ                       NO
+	   ↓                        ↓
+	[CHASE]              [Seguir patrullando]
+	   ↓
    ¿Jugador en radio ataque?
    /                      \
  SÍ                       NO
@@ -2420,8 +2420,8 @@ SÍ          NO  [RETURN]     [Seguir persiguiendo]
 [Cooldown]  [Return] ¿Llegó al waypoint?
 ↓                    /              \
 [Return]          SÍ               NO
-                   ↓                ↓
-                [PATROL]      [Seguir regresando]
+				   ↓                ↓
+				[PATROL]      [Seguir regresando]
 
 * En cualquier momento:
   [Recibe stun] → [STUNNED 0.8s] → [CHASE]
@@ -2759,7 +2759,7 @@ SÍ          NO  [RETURN]     [Seguir persiguiendo]
 
 ```
 ═══════════════════════════════
-    RUNAS DEL NÚCLEO
+	RUNAS DEL NÚCLEO
 ═══════════════════════════════
 
 Desarrollado por:
